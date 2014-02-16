@@ -384,7 +384,6 @@ Button::~Button() {
 
 bool Button::handleEvents(SDL_Event* event) {
 	this->i_settings &= ~BUTTON_CLICKED;
-	PRINT((this->i_settings & BUTTON_ENABLED));
 	if (this->i_settings & BUTTON_ENABLED) {
 		if (event->type == SDL_MOUSEBUTTONUP) {
 			if (event->button.button == SDL_BUTTON_LEFT) {

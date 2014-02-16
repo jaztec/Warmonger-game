@@ -127,6 +127,9 @@ void TileManager::cleanUp() {
     if (this->tilesLoaded) {
         delete [] this->itsTiles;
     }
+    if (this->clipSheet) {
+    	SDL_FreeSurface(this->clipSheet);
+    }
 }
 
 void TileManager::initGraphics() {

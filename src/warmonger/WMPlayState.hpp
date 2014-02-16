@@ -1,12 +1,13 @@
 /*
- * WMMainState.hpp
+ * WMPlayState.hpp
  *
  *  Created on: Feb 16, 2014
  *      Author: jasper
  */
 
-#ifndef WMMAINSTATE_HPP_
-#define WMMAINSTATE_HPP_
+#ifndef WMPLAYSTATE_HPP_
+#define WMPLAYSTATE_HPP_
+
 
 #ifdef __WIN32
 #include "SDL.h"
@@ -22,27 +23,26 @@
 #include "../jaztec/JEngine.h"
 #include "../jaztec/JGameState.h"
 #include "../jaztec/JlibSDL.h"
-
-#include "WMPlayState.hpp"
+#include "../jaztec/TileManager.h"
 
 #include <sstream>
 
 using namespace jasdlib;
 
-class WMMainState: public JGameState {
+class WMPlayState: public JGameState {
 protected:
 	TTF_Font* font;
 	SDL_Surface* background;
-	SDL_Surface* logo;
 	Uint32 frame;
 	Uint32 screenWidth;
 	Uint32 screenHeight;
 	Timer fps;
-	static WMMainState WarmongerMainState;
+	static WMPlayState WarmongerPlayState;
+	TileManager* map;
 
-	WMMainState();
+	WMPlayState();
 public:
-	virtual ~WMMainState(){}
+	virtual ~WMPlayState(){}
 
 	virtual void init(JEngine* engine);
 	virtual void cleanUp();
@@ -53,15 +53,10 @@ public:
 	virtual void update(JEngine* engine);
 	virtual void show(JEngine* game);
 
-	static WMMainState* instance() {
-		return &WarmongerMainState;
+	static WMPlayState* instance() {
+		return &WarmongerPlayState;
 	}
 
-	Button* playButton;
-	Button* quitButton;
-	Button* resumeButton;
 };
 
-
-
-#endif /* WMMAINSTATE_HPP_ */
+#endif /* WMPLAYSTATE_HPP_ */

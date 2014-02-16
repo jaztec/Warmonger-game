@@ -125,9 +125,36 @@ void JEngine::popState() {
  * Call handle events in the loaded game state.
  */
 void JEngine::handleEvents() {
-    if (!gameStates.empty()) {
-        gameStates.back()->handleEvents(this);
-    }
+	// Handle the SDL events.
+	SDL_Event event;
+	while(SDL_PollEvent(&event)) {
+		// And issue to the game states.
+	    if (!gameStates.empty()) {
+	        gameStates.back()->handleEvent(this, &event);
+	    }
+
+	    if (this->stopEventHandling()) {
+	    	break;
+	    }
+
+		switch (event.type) {
+		case (SDL_QUIT):
+			this->exit();
+		break;
+		case (SDL_VIDEORESIZE):
+			this->toggleFullscreen();
+		break;
+		case (SDL_KEYDOWN):
+			switch(event.key.keysym.sym) {
+			case (SDLK_ESCAPE):
+				this->exit();
+			break;
+			case (SDLK_F4):
+				this->toggleFullscreen();
+			break;
+			}
+		}
+	}
 }
 
 /**

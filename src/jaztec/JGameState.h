@@ -44,8 +44,9 @@ public:
     /**
      * Hook function to process user input events.
      * @param JEngine* game
+     * @param SDL_Event event
      */
-    virtual void handleEvents(JEngine* game) = 0;
+    virtual void handleEvent(JEngine* game, SDL_Event* event) = 0;
 
     /**
      * Calculate the new states for any used objects in the memory pool.

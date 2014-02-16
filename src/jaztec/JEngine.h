@@ -20,6 +20,7 @@
 
 #define	ISRUNNING				0x00000001
 #define ISFULLSCREEN            0x00000002
+#define STOPEVENTHANDLING		0x00000004
 
 class JGameState;
 
@@ -35,13 +36,14 @@ private:
     /**
      * @var Uint8 i_settings Placeholder integer to hold settings.
      */
-    Uint8 i_settings;
+    Uint32 i_settings;
+    Uint16 fps;
 
     /**
      * Start the engine.
      */
     void startRunning() {
-        i_settings |= ISRUNNING;
+        this->i_settings |= ISRUNNING;
     }
 
 public:
@@ -127,14 +129,11 @@ public:
      * @return bool 
      */
     bool checkRunning() {
-    	if (this->getStateCount() == 0) {
-    		return false;
-    	}
         return ((i_settings & ISRUNNING) == ISRUNNING);
     }
 
     /**
-     * Test or we are running fullscreen.
+     * Test or we are running full screen.
      * @return bool
      */
     bool isFullscreen() {
@@ -160,9 +159,42 @@ public:
     }
 
     /**
+     * Set the frames per second of the application.
+     * @param Uint16 fps
+     */
+    void setFps(Uint16 fps)
+    {
+    	this->fps = fps;
+    }
+
+    /**
+     * Get the frames per second of this application.
+     * @return Uint16
+     */
+    Uint16 getFps()
+    {
+    	return this->fps;
+    }
+
+    bool stopEventHandling(bool stop)
+    {
+    	this->i_settings &= ~STOPEVENTHANDLING;
+    	if (!stop) {
+    		this->i_settings |= STOPEVENTHANDLING;
+    	}
+    	return ((this->i_settings & STOPEVENTHANDLING) == STOPEVENTHANDLING);
+    }
+
+    bool stopEventHandling()
+    {
+        return ((this->i_settings & STOPEVENTHANDLING) == STOPEVENTHANDLING);
+    }
+
+    /**
      * Stop the engine.
      */
     void exit() {
+    	PRINT("The engine received the quit signal.")
         i_settings &= ~ISRUNNING;
     }
 

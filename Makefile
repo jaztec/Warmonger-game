@@ -34,7 +34,8 @@ OBJS_Application =  \
 	$(OBJDIR_Application)/JEngine.o \
 	$(OBJDIR_Application)/JRoute.o \
 	$(OBJDIR_Application)/JlibSDL.o \
-	$(OBJDIR_Application)/WMMainState.o
+	$(OBJDIR_Application)/WMMainState.o \
+	$(OBJDIR_Application)/WMPlayState.o
 SYSLIBS_Application = -ldl 
 USERLIBS_Application = -Bstatic -lSDL_mixer -lSDL_ttf -lSDL_image -lSDL `sdl-config --libs` $(SYSLIBS_Application) 
 DEPLIBS_Application =      
@@ -65,6 +66,8 @@ $(OBJDIR_Application)/JlibSDL.o: $(SOURCEDIR_Application) src/jaztec/JlibSDL.cpp
 $(OBJDIR_Application)/WMMainState.o: $(SOURCEDIR_Application) src/warmonger/WMMainState.cpp
 	$(COMPILE.cc) $(CCFLAGS_Herder) $(CPPFLAGS_Application) -o $@ src/warmonger/WMMainState.cpp
 
+$(OBJDIR_Application)/WMPlayState.o: $(SOURCEDIR_Application) src/warmonger/WMPlayState.cpp
+	$(COMPILE.cc) $(CCFLAGS_Herder) $(CPPFLAGS_Application) -o $@ src/warmonger/WMPlayState.cpp
 
 #### Clean target deletes all generated files ####
 clean:
