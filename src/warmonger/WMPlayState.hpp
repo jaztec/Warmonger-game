@@ -39,6 +39,7 @@ protected:
 	Timer fps;
 	static WMPlayState WarmongerPlayState;
 	TileManager* map;
+	SDL_Rect* camPosition;
 
 	WMPlayState();
 public:

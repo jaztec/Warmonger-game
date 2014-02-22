@@ -42,13 +42,20 @@ void WMPlayState::init(JEngine* engine)
 	this->background = SDL_CreateRGBSurface(SDL_HWSURFACE, this->screenWidth, this->screenHeight, 32, 0, 0, 0, 0);
 	// Start the timer so we can keep track.
 	this->fps.start();
+	// Setup the camera position.
+	this->camPosition = new SDL_Rect();
+	this->camPosition->h = engine->getScreenHeight();
+	this->camPosition->w = engine->getScreenWidth();
+	this->camPosition->x = 0;
+	this->camPosition->y = 0;
 	// Setup the map
 	SDL_Surface* mapClips = loadImageFromFile("gfx/Background.png");
 	this->map = new TileManager();
 	if (this->map == NULL) {
 		throw ERR::Out_Of_Memory();
 	}
-	this->map->init(mapClips, 8, 6, engine->getScreenWidth(), engine->getScreenHeight());
+	this->map->init(mapClips, 12, 9, engine->getScreenWidth(), engine->getScreenHeight());
+	this->map->makeRandomMap();
 }
 
 void WMPlayState::cleanUp()
@@ -61,6 +68,9 @@ void WMPlayState::cleanUp()
 	}
 	if (this->map) {
 		delete this->map;
+	}
+	if (this->camPosition) {
+		delete this->camPosition;
 	}
 }
 
@@ -76,7 +86,22 @@ void WMPlayState::resume()
 
 void WMPlayState::handleEvent(JEngine* engine, SDL_Event* event)
 {
-
+	if (event->type == SDL_KEYUP) {
+		switch (event->key.keysym.sym) {
+		case (SDLK_UP):
+				this->camPosition->y += 5;
+		break;
+		case (SDLK_DOWN):
+				this->camPosition->y -= 5;
+		break;
+		case (SDLK_LEFT):
+				this->camPosition->x -= 5;
+		break;
+		case (SDLK_RIGHT):
+				this->camPosition->x += 5;
+		break;
+		}
+	}
 }
 
 void WMPlayState::calculate(JEngine * engine)
@@ -86,13 +111,19 @@ void WMPlayState::calculate(JEngine * engine)
 
 void WMPlayState::update(JEngine * engine)
 {
+	// Set the camera position.
+	this->map->camera.setCamera(this->camPosition->x, this->camPosition->y);
 	// Fill the background color.
-	SDL_FillRect(this->background, &this->background->clip_rect, SDL_MapRGB(this->background->format, 0x00, 0x00, 0x00));
+    this->frame++;
 }
 
 void WMPlayState::show(JEngine* engine)
 {
-    SDL_BlitSurface(this->background, NULL, engine->screen, &engine->screen->clip_rect);
+	this->background = this->map->drawMap();
+
+	SDL_Rect* camView = &this->map->camera.getView();
+
+	SDL_BlitSurface(this->background, camView, engine->screen, &engine->screen->clip_rect);
 
     if (SDL_Flip(engine->screen) == -1) {
         throw ( ERR::SDL_Err());
@@ -102,7 +133,7 @@ void WMPlayState::show(JEngine* engine)
         SDL_Delay((1000 / engine->getFps()) - this->fps.getTicks());
     }
 
-    this->frame++;
+    SDL_FreeSurface(this->background);
 }
 
 
