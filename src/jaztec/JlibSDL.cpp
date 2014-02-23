@@ -1,6 +1,7 @@
 #include <limits.h>
 
 #include "JlibSDL.h"
+#include "warmonger/WMCamera.hpp"
 
 /******************************************************************************************
  Class function
@@ -111,7 +112,7 @@ J2DGameObject::J2DGameObject() {
 	this->updateInner();
 }
 
-J2DGameObject::J2DGameObject(Sint16 x, Sint16 y) {
+J2DGameObject::J2DGameObject(Sint32 x, Sint32 y) {
 	this->inner = new SDL_Rect();
 	this->x_pos = x;
 	this->y_pos = y;
@@ -121,7 +122,7 @@ J2DGameObject::J2DGameObject(Sint16 x, Sint16 y) {
 	this->updateInner();
 }
 
-J2DGameObject::J2DGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h) {
+J2DGameObject::J2DGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h) {
 	this->inner = new SDL_Rect();
 	this->x_pos = x;
 	this->y_pos = y;
@@ -210,13 +211,13 @@ void J2DGameObject::setFacing(Uint16 facing) {
 	}
 }
 
-void J2DGameObject::setPos(Sint16 x, Sint16 y) {
+void J2DGameObject::setPos(Sint32 x, Sint32 y) {
 	this->x_pos = x;
 	this->y_pos = y;
 	this->updateInner();
 }
 
-void J2DGameObject::setSize(Uint16 w, Uint16 h) {
+void J2DGameObject::setSize(Uint32 w, Uint32 h) {
 	this->width = w;
 	this->height = h;
 	this->updateInner();
@@ -229,6 +230,16 @@ void J2DGameObject::updateInner() {
 	this->inner->h = this->height;
 }
 
+Sint32 J2DGameObject::getXPosition() const
+{
+    return this->getInnerRect()->x;
+}
+
+Sint32 J2DGameObject::getYPosition() const
+{
+    return this->getInnerRect()->y;
+}
+
 /**
  * J2DMovGameObject
  */
@@ -237,19 +248,19 @@ J2DMovGameObject::J2DMovGameObject() {
 	this->y_speed = 0;
 }
 
-J2DMovGameObject::J2DMovGameObject(Sint16 x, Sint16 y) :
+J2DMovGameObject::J2DMovGameObject(Sint32 x, Sint32 y) :
 		J2DGameObject(x, y) {
 	this->x_speed = 0;
 	this->y_speed = 0;
 }
 
-J2DMovGameObject::J2DMovGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h) :
+J2DMovGameObject::J2DMovGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h) :
 		J2DGameObject(x, y, w, h) {
 	this->x_speed = 0;
 	this->y_speed = 0;
 }
 
-J2DMovGameObject::J2DMovGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h, float xs,
+J2DMovGameObject::J2DMovGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h, float xs,
 		float ys) :
 		J2DGameObject(x, y, w, h) {
 	this->x_speed = xs;
@@ -266,12 +277,22 @@ void J2DMovGameObject::update() {
 }
 
 float J2DMovGameObject::getXspeed() const {
-	return this->x_speed;
+    return this->x_speed;
 }
+
+void J2DMovGameObject::setXSpeed(const float speed) {
+    this->x_speed = speed;
+}
+
 
 float J2DMovGameObject::getYspeed() const {
 	return this->y_speed;
 }
+
+void J2DMovGameObject::setYSpeed(const float speed) {
+    this->y_speed = speed;
+}
+
 
 bool J2DMovGameObject::isMoving() const {
 	return ((this->i_settings & JMGOBJ_IS_MOVING) == JMGOBJ_IS_MOVING);
@@ -292,17 +313,17 @@ J2DPhysicalGameObject::J2DPhysicalGameObject() {
 	this->weight = 1.0f;
 }
 
-J2DPhysicalGameObject::J2DPhysicalGameObject(Sint16 x, Sint16 y) :
+J2DPhysicalGameObject::J2DPhysicalGameObject(Sint32 x, Sint32 y) :
 		J2DMovGameObject(x, y) {
 	this->weight = 1.0f;
 }
 
-J2DPhysicalGameObject::J2DPhysicalGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h) :
+J2DPhysicalGameObject::J2DPhysicalGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h) :
 		J2DMovGameObject(x, y, w, h) {
 	this->weight = 1.0f;
 }
 
-J2DPhysicalGameObject::J2DPhysicalGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h,
+J2DPhysicalGameObject::J2DPhysicalGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h,
 		float we) :
 		J2DMovGameObject(x, y, w, h) {
 	this->weight = we;

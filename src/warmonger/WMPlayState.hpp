@@ -25,6 +25,8 @@
 #include "../jaztec/JlibSDL.h"
 #include "../jaztec/TileManager.h"
 
+#include "WMCamera.hpp"
+
 #include <sstream>
 
 using namespace jasdlib;
@@ -38,7 +40,7 @@ protected:
 	Timer fps;
 	static WMPlayState WarmongerPlayState;
 	TileManager* map;
-	SDL_Rect* camPosition;
+	WMCamera* camera;
 
 	WMPlayState();
 public:

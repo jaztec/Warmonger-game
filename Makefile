@@ -35,7 +35,8 @@ OBJS_Application =  \
 	$(OBJDIR_Application)/JRoute.o \
 	$(OBJDIR_Application)/JlibSDL.o \
 	$(OBJDIR_Application)/WMMainState.o \
-	$(OBJDIR_Application)/WMPlayState.o
+	$(OBJDIR_Application)/WMPlayState.o \
+	$(OBJDIR_Application)/WMCamera.o
 SYSLIBS_Application = -ldl 
 USERLIBS_Application = -Bstatic -lSDL_mixer -lSDL_ttf -lSDL_image -lSDL `sdl-config --libs` $(SYSLIBS_Application) 
 DEPLIBS_Application =      
@@ -68,6 +69,9 @@ $(OBJDIR_Application)/WMMainState.o: $(SOURCEDIR_Application) src/warmonger/WMMa
 
 $(OBJDIR_Application)/WMPlayState.o: $(SOURCEDIR_Application) src/warmonger/WMPlayState.cpp
 	$(COMPILE.cc) $(CCFLAGS_Herder) $(CPPFLAGS_Application) -o $@ src/warmonger/WMPlayState.cpp
+	
+$(OBJDIR_Application)/WMCamera.o: $(SOURCEDIR_Application) src/warmonger/WMCamera.cpp
+	$(COMPILE.cc) $(CCFLAGS_Herder) $(CPPFLAGS_Application) -o $@ src/warmonger/WMCamera.cpp
 
 #### Clean target deletes all generated files ####
 clean:
@@ -78,7 +82,8 @@ clean:
 		$(OBJDIR_Application)/JEngine.o \
 		$(OBJDIR_Application)/JRoute.o \
 		$(OBJDIR_Application)/JlibSDL.o \
-		$(OBJDIR_Application)/WMMainState.o
+		$(OBJDIR_Application)/WMMainState.o \
+		$(OBJDIR_Application)/WMCamera.o
 # Enable dependency checking
 .KEEP_STATE:
 .KEEP_STATE_FILE:.make.state.GNU-i386-Linux

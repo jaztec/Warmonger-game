@@ -177,7 +177,7 @@ public:
 	 * @param Uint16 x
 	 * @param Uint16 y
 	 */
-	J2DGameObject(Sint16 x, Sint16 y);
+	J2DGameObject(Sint32 x, Sint32 y);
 
 	/**
 	 * Constructor
@@ -186,7 +186,7 @@ public:
 	 * @param Uint16 w
 	 * @param Uint16 h
 	 */
-	J2DGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h);
+	J2DGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h);
 
 	/**
 	 * Destructor
@@ -230,12 +230,14 @@ public:
 	/**
 	 * Functions for setting the different internal parameters.
 	 */
-	void setPos(Sint16 x, Sint16 y);
-	void setSize(Uint16 w, Uint16 h);
+	void setPos(Sint32 x, Sint32 y);
+	void setSize(Uint32 w, Uint32 h);
+    Sint32 getXPosition() const;
+    Sint32 getYPosition() const;
 
 protected:
-	Sint16 x_pos, y_pos;
-	Sint16 width, height;
+	Sint32 x_pos, y_pos;
+	Uint32 width, height;
 	SDL_Rect* inner;
 
 	Uint32 i_settings;
@@ -249,16 +251,18 @@ protected:
 class J2DMovGameObject: public J2DGameObject {
 public:
 	J2DMovGameObject();
-	J2DMovGameObject(Sint16 x, Sint16 y);
-	J2DMovGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h);
-	J2DMovGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h, float xs, float ys);
+	J2DMovGameObject(Sint32 x, Sint32 y);
+	J2DMovGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h);
+	J2DMovGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h, float xs, float ys);
 	virtual ~J2DMovGameObject();
 
 	virtual void update();
 
 	float getXspeed() const;
 	float getYspeed() const;
-
+    void setXSpeed(const float speed);
+    void setYSpeed(const float speed);
+    
 	bool isMoving() const;
 	void startMoving();
 	void stopMoving();
@@ -273,9 +277,9 @@ protected:
 class J2DPhysicalGameObject: public J2DMovGameObject {
 public:
 	J2DPhysicalGameObject();
-	J2DPhysicalGameObject(Sint16 x, Sint16 y);
-	J2DPhysicalGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h);
-	J2DPhysicalGameObject(Sint16 x, Sint16 y, Uint16 w, Uint16 h, float we);
+	J2DPhysicalGameObject(Sint32 x, Sint32 y);
+	J2DPhysicalGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h);
+	J2DPhysicalGameObject(Sint32 x, Sint32 y, Uint32 w, Uint32 h, float we);
 	virtual ~J2DPhysicalGameObject();
 
 	float getWeight() const;

@@ -115,7 +115,7 @@ void JRoute::set_camera(Camera* cam) {
     int xP = lastXpos - ROS_SCREEN_WIDTH / 2;
     int yP = lastYpos - ROS_SCREEN_HEIGHT / 2;
 
-    cam->setCamera(xP, yP);
+    cam->setPosition(xP, yP);
 }
 
 SDL_Surface* JRoute::draw_route() {

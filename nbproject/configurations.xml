@@ -10,6 +10,8 @@
           <in>TileManager.cpp</in>
         </df>
         <df name="warmonger">
+          <in>WMCamera.cpp</in>
+          <in>WMCamera.hpp</in>
           <in>WMMainState.cpp</in>
           <in>WMPlayState.cpp</in>
         </df>
@@ -66,6 +68,10 @@
       <item path="src/jaztec/JlibSDL.cpp" ex="false" tool="1" flavor2="4">
       </item>
       <item path="src/jaztec/TileManager.cpp" ex="false" tool="1" flavor2="4">
+      </item>
+      <item path="src/warmonger/WMCamera.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/warmonger/WMCamera.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/warmonger/WMMainState.cpp" ex="false" tool="1" flavor2="0">
       </item>

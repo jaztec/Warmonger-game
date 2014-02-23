@@ -32,6 +32,8 @@
         <df name="ux">
         </df>
         <df name="warmonger">
+          <in>WMCamera.cpp</in>
+          <in>WMCamera.hpp</in>
           <in>WMMainState.cpp</in>
           <in>WMMainState.hpp</in>
           <in>WMPlayState.cpp</in>

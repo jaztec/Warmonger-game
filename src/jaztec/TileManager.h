@@ -47,12 +47,10 @@ public:
 };
 
 class Camera {
-private:
+protected:
     SDL_Rect itsView;
     Uint32 mapWidth;
     Uint32 mapHeight;
-
-protected:
 
 public:
     Camera();
@@ -60,7 +58,7 @@ public:
     ~Camera() {
     }
 
-    void setCamera(Sint32 xPos, Sint32 yPos);
+    void setPosition(Sint32 xPos, Sint32 yPos);
     void setDimensions(Uint16 camW, Uint16 camH);
 
     SDL_Rect getView() const {
@@ -87,10 +85,11 @@ private:
 
     SDL_Surface* clipSheet;
 
+    Camera* camera;
+
     void initGraphics();
     void readMap();
     bool isInView(Tile* tile);
-
 public:
 
     TileManager() {
@@ -99,6 +98,7 @@ public:
     	this->loadedMap = NULL;
     	this->mapLoaded = false;
     	this->tilesLoaded = false;
+        this->camera = NULL;
     }
 
     ~TileManager() {
@@ -118,8 +118,10 @@ public:
 
     Uint32 getMapWidth() const;
     Uint32 getMapHeight() const;
+    
+    Camera* getCamera() const;
+    void setCamera(Camera* camera);
 
-    Camera camera;
 };
 
 #endif

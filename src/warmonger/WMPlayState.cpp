@@ -8,6 +8,7 @@
 #include "../jaztec/ErrHandling.hpp"
 #include "../jaztec/JEngine.h"
 #include "WMMainState.hpp"
+#include "WMCamera.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -25,7 +26,7 @@ WMPlayState::WMPlayState() {
 	this->screenHeight = 0;
 	this->screenWidth = 0;
 	this->map = NULL;
-	this->camPosition = NULL;
+	this->camera = NULL;
 }
 
 void WMPlayState::init(JEngine* engine) {
@@ -45,11 +46,8 @@ void WMPlayState::init(JEngine* engine) {
 	// Start the timer so we can keep track.
 	this->fps.start();
 	// Setup the camera position.
-	this->camPosition = new SDL_Rect();
-	this->camPosition->h = engine->getScreenHeight();
-	this->camPosition->w = engine->getScreenWidth();
-	this->camPosition->x = 0;
-	this->camPosition->y = 0;
+    Camera* camera = new WMCamera();
+    this->camera = camera;
 	// Setup the map
     std::string clipsPath = getAbsolutePath(engine->getBasePath() + "/../gfx/Background.png");
 	SDL_Surface* mapClips = loadImageFromFile(clipsPath.c_str());
@@ -57,6 +55,7 @@ void WMPlayState::init(JEngine* engine) {
 	if (this->map == NULL) {
 		throw ERR::Out_Of_Memory();
 	}
+    this->map->setCamera(camera);
 	this->map->init(mapClips, 12, 12, engine->getScreenWidth(),
 			engine->getScreenHeight());
 	this->map->makeRandomMap();
@@ -71,10 +70,6 @@ void WMPlayState::cleanUp() {
 		delete this->map;
 		this->map = NULL;
 	}
-	if (this->camPosition) {
-		delete this->camPosition;
-		this->camPosition = NULL;
-	}
 }
 
 void WMPlayState::pause() {
@@ -86,22 +81,33 @@ void WMPlayState::resume() {
 }
 
 void WMPlayState::handleEvent(JEngine* engine, SDL_Event* event) {
-	if (event->type == SDL_KEYUP) {
+	if (event->type == SDL_KEYDOWN) {
 		switch (event->key.keysym.sym) {
 		case (SDLK_UP):
-			this->camPosition->y += 5;
+			this->camera->setYSpeed(-5.0f);
 			break;
 		case (SDLK_DOWN):
-			this->camPosition->y -= 5;
+			this->camera->setYSpeed(5.0f);
 			break;
 		case (SDLK_LEFT):
-			this->camPosition->x -= 5;
+			this->camera->setXSpeed(-5.0f);
 			break;
 		case (SDLK_RIGHT):
-			this->camPosition->x += 5;
+			this->camera->setXSpeed(5.0f);
 			break;
 		}
-	}
+	} else if (event->type == SDL_KEYUP) {
+		switch (event->key.keysym.sym) {
+		case (SDLK_UP):
+		case (SDLK_DOWN):
+			this->camera->setYSpeed(0.0f);
+			break;
+		case (SDLK_LEFT):
+		case (SDLK_RIGHT):
+			this->camera->setXSpeed(0.0f);
+			break;
+		}
+    }
 }
 
 void WMPlayState::calculate(JEngine * engine) {
@@ -109,16 +115,15 @@ void WMPlayState::calculate(JEngine * engine) {
 }
 
 void WMPlayState::update(JEngine * engine) {
-	// Set the camera position.
-	this->map->camera.setCamera(this->camPosition->x, this->camPosition->y);
-	// Fill the background color.
+	this->camera->update();
+    // Keep track of the frames.
 	this->frame++;
 }
 
 void WMPlayState::show(JEngine* engine) {
 	SDL_Surface* background = this->map->drawMap();
 
-	SDL_Rect* camView = &this->map->camera.getView();
+	SDL_Rect* camView = &this->map->getCamera()->getView();
 
 	SDL_BlitSurface(background, camView, engine->screen,
 			&engine->screen->clip_rect);

@@ -62,7 +62,7 @@ Camera::Camera() {
     itsView.h = 0;
 }
 
-void Camera::setCamera(Sint32 xPos, Sint32 yPos) {
+void Camera::setPosition(Sint32 xPos, Sint32 yPos) {
     if (itsView.w < this->getMapWidth()) {
         if ((xPos > 0) && ((xPos + this->itsView.w) <= this->getMapWidth())) {
         	this->itsView.x = xPos;
@@ -87,6 +87,21 @@ void Camera::setCamera(Sint32 xPos, Sint32 yPos) {
     }
 }
 
+Camera* TileManager::getCamera() const {
+    return this->camera;
+}
+
+void TileManager::setCamera(Camera* camera) {
+    // Clean up if a camera is loaded already.
+    if (this->camera)
+    {
+        delete this->camera;
+        this->camera = NULL;
+    }
+    this->camera = camera;
+}
+
+
 void Camera::setDimensions(Uint16 camW, Uint16 camH) {
 	this->itsView.w = camW;
 	this->itsView.h = camH;
@@ -106,10 +121,14 @@ void TileManager::init(SDL_Surface* itsgraphs, Uint32 xTiles, Uint32 yTiles, Uin
     this->mapWidth = xTiles * TILE_WIDTH;
     this->mapHeight = yTiles * TILE_HEIGHT;
 
+    // If there is no camera present create one.
+    if (!this->camera) {
+        this->camera = new Camera();
+    }
     // Setup the camera.
-    this->camera.setMapWidth(this->getMapWidth());
-    this->camera.setMapHeight(this->getMapHeight());
-    this->camera.setDimensions(screenWidth, screenHeigth);
+    this->camera->setMapWidth(this->getMapWidth());
+    this->camera->setMapHeight(this->getMapHeight());
+    this->camera->setDimensions(screenWidth, screenHeigth);
 
     this->initGraphics();
     std::cout << "TileManager initiated" << std::endl;
@@ -125,6 +144,10 @@ void TileManager::cleanUp() {
     }
     if (this->clipSheet) {
     	SDL_FreeSurface(this->clipSheet);
+    }
+    if (this->camera) {
+        delete this->camera;
+        this->camera = NULL;
     }
 }
 
@@ -244,7 +267,7 @@ void TileManager::loadMap(std::string) {
 }
 
 bool TileManager::isInView(Tile* tile) {
-    SDL_Rect cam = camera.getView();
+    SDL_Rect cam = camera->getView();
     SDL_Rect& tileB = tile->getInnerRect();
 
     if ((tileB.y + tileB.h) < cam.y ||
