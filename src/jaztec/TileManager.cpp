@@ -91,6 +91,17 @@ Camera* TileManager::getCamera() const {
     return this->camera;
 }
 
+TileManager::TileManager() 
+{
+    this->clipSheet = NULL;
+    this->itsTiles = NULL;
+    this->loadedMap = NULL;
+    this->mapLoaded = false;
+    this->tilesLoaded = false;
+    this->camera = NULL;
+}
+
+
 void TileManager::setCamera(Camera* camera) {
     // Clean up if a camera is loaded already.
     if (this->camera)

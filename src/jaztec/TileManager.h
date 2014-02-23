@@ -92,14 +92,7 @@ private:
     bool isInView(Tile* tile);
 public:
 
-    TileManager() {
-    	this->clipSheet = NULL;
-    	this->itsTiles = NULL;
-    	this->loadedMap = NULL;
-    	this->mapLoaded = false;
-    	this->tilesLoaded = false;
-        this->camera = NULL;
-    }
+    TileManager();
 
     ~TileManager() {
     }
