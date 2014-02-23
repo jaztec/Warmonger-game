@@ -7,7 +7,7 @@ class JGameState {
 protected:
 
 	/**
-	 * Private constructor for singleton implementation.
+	 * Protected constructor for singleton implementation.
 	 */
     JGameState() {
     }

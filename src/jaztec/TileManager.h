@@ -49,6 +49,8 @@ public:
 class Camera {
 private:
     SDL_Rect itsView;
+    Uint32 mapWidth;
+    Uint32 mapHeight;
 
 protected:
 
@@ -64,6 +66,12 @@ public:
     SDL_Rect getView() const {
         return this->itsView;
     }
+
+    void setMapWidth(Uint32 width);
+    void setMapHeight(Uint32 height);
+
+    Uint32 getMapWidth() const;
+    Uint32 getMapHeight() const;
 };
 
 class TileManager {
@@ -73,6 +81,9 @@ private:
 
     bool tilesLoaded;
     bool mapLoaded;
+
+    Uint32 mapWidth;
+    Uint32 mapHeight;
 
     SDL_Surface* clipSheet;
 
@@ -105,8 +116,8 @@ public:
     bool checkTilesLoaded()const;
     bool checkMapLoaded()const;
 
-    unsigned int getMapWidth();
-    unsigned int getMapHeight();
+    Uint32 getMapWidth() const;
+    Uint32 getMapHeight() const;
 
     Camera camera;
 };

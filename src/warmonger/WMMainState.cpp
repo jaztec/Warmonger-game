@@ -32,7 +32,7 @@ WMMainState::WMMainState()
 void WMMainState::init(JEngine* engine)
 {
 	// Load the font.
-	this->font = TTF_OpenFont("obj/sans.ttf", 30);
+	this->font = TTF_OpenFont("../font/sans.ttf", 30);
 	if (this->font == NULL) {
 		throw ERR::Out_Of_Memory();
 	}
@@ -48,11 +48,12 @@ void WMMainState::init(JEngine* engine)
 	// Create the background of our state.
 	this->background = SDL_CreateRGBSurface(SDL_HWSURFACE, this->screenWidth, this->screenHeight, 32, 0, 0, 0, 0);
 	// Load the logo for the background.
-	this->logo = loadImageFromFile("gfx/MainHeader.png");
+	this->logo = loadImageFromFile("../gfx/MainHeader.png");
 }
 
 void WMMainState::cleanUp()
 {
+	PRINT("WMMainState::cleanUp");
 	if (this->font != NULL) {
 		TTF_CloseFont(this->font);
 	}

@@ -57,14 +57,17 @@ void JEngine::cleanUp() {
     SDL_Flip(screen);
 
     // Release the loaded game states.
-    while (!gameStates.empty()) {
-        gameStates.back()->cleanUp();
-        gameStates.pop_back();
+    while (!this->gameStates.empty()) {
+    	this->gameStates.back()->cleanUp();
+    	this->gameStates.pop_back();
     }
 
     // Close SDL.
+    std::cout << "Closing audio" << std::endl;
     Mix_CloseAudio();
+    std::cout << "Closing font" << std::endl;
     TTF_Quit();
+    std::cout << "Closing SDL" << std::endl;
     SDL_Quit();
 
     printf("Game engine terminated\n");
@@ -76,14 +79,14 @@ void JEngine::cleanUp() {
 void JEngine::changeState(JGameState* gameState) {
     PRINT("JEngine::change_state");
     // Close any existing game state.
-    if (!gameStates.empty()) {
-        gameStates.back()->cleanUp();
-        gameStates.pop_back();
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->cleanUp();
+    	this->gameStates.pop_back();
     }
 
     // Setup the new game state and initiate it.
-    gameStates.push_back(gameState);
-    gameStates.back()->init(this);
+    this->gameStates.push_back(gameState);
+    this->gameStates.back()->init(this);
 
 }
 
@@ -93,8 +96,8 @@ void JEngine::changeState(JGameState* gameState) {
 void JEngine::pushState(JGameState* gameState) {
     PRINT("JEngine::push_state");
     // Close any existing game state.
-    if (!gameStates.empty()) {
-        gameStates.back()->pause();
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->pause();
     }
 
     // Setup the new game state and initiate it.
@@ -109,14 +112,14 @@ void JEngine::pushState(JGameState* gameState) {
 void JEngine::popState() {
     PRINT("JEngine::pop_state");
     // Close any existing game state.
-    if (!gameStates.empty()) {
-        gameStates.back()->cleanUp();
-        gameStates.pop_back();
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->cleanUp();
+    	this->gameStates.pop_back();
     }
 
     // If another game state remains resume this state.
-    if (!gameStates.empty()) {
-        gameStates.back()->resume();
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->resume();
     }
 
 }
@@ -129,8 +132,8 @@ void JEngine::handleEvents() {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		// And issue to the game states.
-	    if (!gameStates.empty()) {
-	        gameStates.back()->handleEvent(this, &event);
+	    if (!this->gameStates.empty()) {
+	    	this->gameStates.back()->handleEvent(this, &event);
 	    }
 
 	    if (this->stopEventHandling()) {
@@ -161,8 +164,8 @@ void JEngine::handleEvents() {
  * Calculate new moves.
  */
 void JEngine::calculate() {
-    if (!gameStates.empty()) {
-        gameStates.back()->calculate(this);
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->calculate(this);
     }
 }
 
@@ -170,8 +173,8 @@ void JEngine::calculate() {
  * Update the objects.
  */
 void JEngine::update() {
-    if (!gameStates.empty()) {
-        gameStates.back()->update(this);
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->update(this);
     }
 }
 
@@ -179,8 +182,8 @@ void JEngine::update() {
  * Show the currently loaded game state.
  */
 void JEngine::show() {
-    if (!gameStates.empty()) {
-        gameStates.back()->show(this);
+    if (!this->gameStates.empty()) {
+    	this->gameStates.back()->show(this);
     }
 }
 
@@ -192,16 +195,16 @@ void JEngine::toggleFullscreen() {
 
     if (!this->isFullscreen()) {
     	// Set flags.
-        i_settings |= ISFULLSCREEN;
+    	this->i_settings |= ISFULLSCREEN;
         flag = SDL_HWSURFACE | SDL_HWACCEL | SDL_DOUBLEBUF | SDL_FULLSCREEN;
     } else {
     	// Set flags
-        i_settings &= ~ISFULLSCREEN;
+    	this->i_settings &= ~ISFULLSCREEN;
         flag = SDL_HWSURFACE | SDL_HWACCEL | SDL_DOUBLEBUF | SDL_RESIZABLE;
     }
 
     // Reset the screen.
-    screen = SDL_SetVideoMode(screen->clip_rect.w, screen->clip_rect.h, 0, flag);
+    this->screen = SDL_SetVideoMode(screen->clip_rect.w, screen->clip_rect.h, 0, flag);
 
 }
 

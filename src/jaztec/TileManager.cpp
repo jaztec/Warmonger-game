@@ -1,19 +1,15 @@
-/*
- * Made by Jasper van Herpt
- *
- * Jan-2010
- *
+/**
+ * @author Jasper van Herpt
+ * @date Jan-2010
  */
 
 unsigned short MAP_SIZE = 0;
-unsigned long MAP_WIDTH = 0;
-unsigned long MAP_HEIGHT = 0;
 
 #include "TileManager.h"
 
-// Klasse Tile
-//
-//
+/**
+ * Class Tile
+ */
 
 Tile::Tile() {
     this->inner = new SDL_Rect;
@@ -67,24 +63,24 @@ Camera::Camera() {
 }
 
 void Camera::setCamera(Sint32 xPos, Sint32 yPos) {
-    if (itsView.w < MAP_WIDTH) {
-        if ((xPos > 0) && ((xPos + this->itsView.w) <= MAP_WIDTH)) {
+    if (itsView.w < this->getMapWidth()) {
+        if ((xPos > 0) && ((xPos + this->itsView.w) <= this->getMapWidth())) {
         	this->itsView.x = xPos;
         } else if (xPos < 0) {
         	this->itsView.x = 0;
-        } else if ((xPos + itsView.w) > MAP_WIDTH) {
-        	this->itsView.x = MAP_WIDTH - this->itsView.w;
+        } else if ((xPos + itsView.w) > this->getMapWidth()) {
+        	this->itsView.x = this->getMapWidth() - this->itsView.w;
         }
     } else
         itsView.x = 0;
 
-    if (this->itsView.h < MAP_HEIGHT) {
-        if ((yPos > 0) && ((yPos + this->itsView.h) <= MAP_HEIGHT)) {
+    if (this->itsView.h < this->getMapHeight()) {
+        if ((yPos > 0) && ((yPos + this->itsView.h) <= this->getMapHeight())) {
         	this->itsView.y = yPos;
         } else if (yPos < 0) {
         	this->itsView.y = 0;
-        } else if ((yPos + this->itsView.h) > MAP_HEIGHT) {
-        	this->itsView.y = MAP_HEIGHT - this->itsView.h;
+        } else if ((yPos + this->itsView.h) > this->getMapHeight()) {
+        	this->itsView.y = this->getMapHeight() - this->itsView.h;
         }
     } else {
     	this->itsView.y = 0;
@@ -98,9 +94,6 @@ void Camera::setDimensions(Uint16 camW, Uint16 camH) {
 
 
 void TileManager::init(SDL_Surface* itsgraphs, Uint32 xTiles, Uint32 yTiles, Uint32 screenWidth, Uint32 screenHeigth) {
-    std::cout << "TileManager initiated\n";
-    this->tilesLoaded = false;
-    this->mapLoaded = false;
 
     this->clipSheet = itsgraphs;
 
@@ -110,17 +103,17 @@ void TileManager::init(SDL_Surface* itsgraphs, Uint32 xTiles, Uint32 yTiles, Uin
     }
 
     MAP_SIZE = xTiles * yTiles;
-    MAP_WIDTH = xTiles * TILE_WIDTH;
-    MAP_HEIGHT = yTiles * TILE_HEIGHT;
+    this->mapWidth = xTiles * TILE_WIDTH;
+    this->mapHeight = yTiles * TILE_HEIGHT;
 
     this->camera.setDimensions(screenWidth, screenHeigth);
 
     this->initGraphics();
-
+    std::cout << "TileManager initiated" << std::endl;
 }
 
 void TileManager::cleanUp() {
-    std::cout << "Destroying TileManager\n";
+    std::cout << "Destroying TileManager" << std::endl;
     if (this->mapLoaded) {
         delete [] this->loadedMap;
     }
@@ -208,7 +201,7 @@ void TileManager::makeRandomMap() {
     for (unsigned int i = 0; i < MAP_SIZE; i++) {
         bool tile_placed = false;
 
-        if (depth == MAP_WIDTH) {
+        if (depth == this->getMapWidth()) {
             height += TILE_HEIGHT;
             depth = 0;
         }
@@ -238,7 +231,7 @@ void TileManager::makeRandomMap() {
         depth += TILE_WIDTH;
     }
 
-    //read_map(); // Uncomment voor het uitschrijven van de map per tegel naar het scherm
+    //read_map(); // Remove comment to write the map configuration to the output buffer.
 
     this->mapLoaded = true;
     std::cout << "Made random map\n";
@@ -263,13 +256,14 @@ bool TileManager::isInView(Tile* tile) {
 
 SDL_Surface* TileManager::drawMap() {
     if (mapLoaded) {
-        SDL_Surface* screen = SDL_CreateRGBSurface(SDL_HWSURFACE, MAP_WIDTH, MAP_HEIGHT, 32, 0, 0, 0, 0);
+        SDL_Surface* screen = SDL_CreateRGBSurface(SDL_HWSURFACE, this->getMapWidth(), this->getMapHeight(), 32, 0, 0, 0, 0);
         if (screen == 0) {
             return NULL;
         }
         for (int i = 0; i < MAP_SIZE; i++) {
-            if (this->isInView(&loadedMap[ i ]))
+            if (this->isInView(&loadedMap[ i ])) {
                 loadedMap[ i ].show(screen, clipSheet, &itsTiles[ loadedMap[ i ].getType() - 1 ]);
+            }
         }
         return screen;
     }
@@ -289,20 +283,34 @@ Tile* TileManager::getFinishTile() {
     return NULL;
 }
 
-bool TileManager::checkTilesLoaded()const {
+bool TileManager::checkTilesLoaded() const {
     return this->tilesLoaded;
 }
 
-bool TileManager::checkMapLoaded()const {
+bool TileManager::checkMapLoaded() const {
     return this->mapLoaded;
 }
 
-unsigned int TileManager::getMapWidth() {
-    return MAP_WIDTH;
+Uint32 TileManager::getMapWidth() const {
+    return this->mapWidth;
 }
 
-unsigned int TileManager::getMapHeight() {
-    return MAP_HEIGHT;
+Uint32 TileManager::getMapHeight() const {
+    return this->mapHeight;
 }
 
+void Camera::setMapWidth(Uint32 width) {
+	this->mapWidth = width;
+}
 
+void Camera::setMapHeight(Uint32 height) {
+	this->mapHeight = height;
+}
+
+Uint32 Camera::getMapWidth() const {
+	return this->mapWidth;
+}
+
+Uint32 Camera::getMapHeight() const {
+	return this->mapHeight;
+}

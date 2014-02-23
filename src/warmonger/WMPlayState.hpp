@@ -32,7 +32,6 @@ using namespace jasdlib;
 class WMPlayState: public JGameState {
 protected:
 	TTF_Font* font;
-	SDL_Surface* background;
 	Uint32 frame;
 	Uint32 screenWidth;
 	Uint32 screenHeight;
