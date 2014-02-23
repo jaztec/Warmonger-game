@@ -4,6 +4,7 @@
 
 #include <string>
 #include <iostream>
+#include <errno.h>
 
 // Verwijder/Zet de comment marks hierbeneden voor runtime debug opties.
 #define ___DBUG

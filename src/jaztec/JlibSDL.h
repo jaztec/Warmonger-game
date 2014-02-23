@@ -329,6 +329,13 @@ protected:
  * General functions
  */
 
+/**
+ * Takes a relative path and returns an absolute path.
+ * @param std::string relativePath The path to make absolute
+ * @return std::string
+ */
+std::string getAbsolutePath(const std::string& relativePath);
+
 SDL_Surface* loadImageFromFile(const char* fileName);
 
 double distance(int x1, int y1, int x2, int y2);

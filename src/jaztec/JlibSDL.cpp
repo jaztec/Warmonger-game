@@ -1,3 +1,5 @@
+#include <limits.h>
+
 #include "JlibSDL.h"
 
 /******************************************************************************************
@@ -451,6 +453,15 @@ int Button::getY() const {
 /******************************************************************************
  Algemene functies
  ******************************************************************************/
+
+std::string getAbsolutePath(const std::string& relativePath)
+{
+    char resolvedPath[PATH_MAX + 1];
+    const char* relativePathPtr = relativePath.c_str();
+    char* ptr;
+    ptr = realpath(relativePathPtr, resolvedPath);
+    return relativePath;
+}
 
 SDL_Surface* loadImageFromFile(const char* fileName) {
 	// Create 2 SDL Surfaces. 1 to read from the file and the other to build a optimized images.

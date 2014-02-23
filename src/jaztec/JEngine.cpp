@@ -1,4 +1,12 @@
 
+#include <vector>
+#include <deque>
+#include <string>
+#include <limits.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sstream>
+
 #include "ErrHandling.hpp"
 #include "JEngine.h"
 #include "JGameState.h"
@@ -208,3 +216,20 @@ void JEngine::toggleFullscreen() {
 
 }
 
+/**
+ * Set the executable path of the application for file reference.
+ * @param std::string path
+ */
+void JEngine::setBasePath(std::string path)
+{
+    this->basePath = path;
+}
+
+/**
+ * Retrieve the base path of the executable
+ * @return std::string
+ */
+std::string JEngine::getBasePath() const
+{
+    return this->basePath;
+}

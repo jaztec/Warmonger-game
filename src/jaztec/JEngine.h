@@ -17,6 +17,11 @@
 #include <vector>
 #include <deque>
 #include <string>
+#include <limits.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sstream>
+#include "ErrHandling.hpp"
 
 #define	ISRUNNING				0x00000001
 #define ISFULLSCREEN            0x00000002
@@ -32,6 +37,11 @@ private:
 	 * @var std::vector<JGameState*> gameStates All loaded game states.
 	 */
     std::vector<JGameState*> gameStates;
+    
+    /**
+     * @var std::string basePath
+     */
+    std::string basePath;
 
     /**
      * @var Uint8 i_settings Placeholder integer to hold settings.
@@ -113,6 +123,18 @@ public:
      * Toggle showing in full screen modus.
      */
     void toggleFullscreen();
+
+    /**
+     * Set the executable path of the application for file reference.
+     * @param std::string path
+     */
+    void setBasePath(std::string path);
+
+    /**
+     * Retrieve the base path of the executable
+     * @return std::string
+     */
+    std::string getBasePath() const;
 
     /**
      * Get the count of loaded game states.

@@ -32,7 +32,8 @@ WMMainState::WMMainState()
 void WMMainState::init(JEngine* engine)
 {
 	// Load the font.
-	this->font = TTF_OpenFont("../font/sans.ttf", 30);
+    std::string fontPath = getAbsolutePath(engine->getBasePath() + "/../font/sans.ttf");
+	this->font = TTF_OpenFont(fontPath.c_str(), 30);
 	if (this->font == NULL) {
 		throw ERR::Out_Of_Memory();
 	}
@@ -47,8 +48,12 @@ void WMMainState::init(JEngine* engine)
 	this->fps.start();
 	// Create the background of our state.
 	this->background = SDL_CreateRGBSurface(SDL_HWSURFACE, this->screenWidth, this->screenHeight, 32, 0, 0, 0, 0);
+	if (this->background == NULL) {
+		throw ERR::Out_Of_Memory();
+	}
 	// Load the logo for the background.
-	this->logo = loadImageFromFile("../gfx/MainHeader.png");
+    std::string clipsPath = getAbsolutePath(engine->getBasePath() + "/../gfx/MainHeader.png");
+	this->logo = loadImageFromFile(clipsPath.c_str());
 }
 
 void WMMainState::cleanUp()

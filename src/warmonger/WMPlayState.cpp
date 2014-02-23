@@ -6,6 +6,7 @@
  */
 
 #include "../jaztec/ErrHandling.hpp"
+#include "../jaztec/JEngine.h"
 #include "WMMainState.hpp"
 
 #include <fstream>
@@ -30,8 +31,11 @@ WMPlayState::WMPlayState() {
 void WMPlayState::init(JEngine* engine) {
 	PRINT("WMPlayState::init");
 	// Load the font.
-	this->font = TTF_OpenFont("../font/sans.ttf", 30);
+    std::string fontPath = getAbsolutePath(engine->getBasePath() + "/../font/sans.ttf");
+    std::cout << fontPath.c_str();
+	this->font = TTF_OpenFont(fontPath.c_str(), 30);
 	if (this->font == NULL) {
+        std::cout << "Not able to open font" << std::endl;
 		throw ERR::Out_Of_Memory();
 	}
 	// Set some internal variables.
@@ -47,7 +51,8 @@ void WMPlayState::init(JEngine* engine) {
 	this->camPosition->x = 0;
 	this->camPosition->y = 0;
 	// Setup the map
-	SDL_Surface* mapClips = loadImageFromFile("../gfx/Background.png");
+    std::string clipsPath = getAbsolutePath(engine->getBasePath() + "/../gfx/Background.png");
+	SDL_Surface* mapClips = loadImageFromFile(clipsPath.c_str());
 	this->map = new TileManager();
 	if (this->map == NULL) {
 		throw ERR::Out_Of_Memory();
@@ -55,12 +60,10 @@ void WMPlayState::init(JEngine* engine) {
 	this->map->init(mapClips, 12, 12, engine->getScreenWidth(),
 			engine->getScreenHeight());
 	this->map->makeRandomMap();
-	std::cout << "Warmonger play state initialization complete" << std::endl;
-	PRINT("WMPlayState::init finish");
 }
 
 void WMPlayState::cleanUp() {
-	PRINT('WMPlayState::cleanUp');
+	PRINT("WMPlayState::cleanUp");
 	if (this->font != NULL) {
 		TTF_CloseFont(this->font);
 	}

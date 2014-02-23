@@ -8,11 +8,28 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
+    std::string appName = "Warmonger";
+    std::string basePath;
 
+    // Setting up the base path.
+    char szTmp[32];
+    sprintf(szTmp, "/proc/%d/exe", getpid());
+    char pBuf[1024];
+    int bytes = readlink(szTmp, pBuf, sizeof(pBuf) - 1);
+    if (bytes <= 0) {
+        return 1;
+    }
+    pBuf[bytes] = '\0';
+    basePath += pBuf;
+    // Remove the application name from the string.
+    unsigned int pos = basePath.find_last_of("/\\");
+    basePath = basePath.substr(0, pos);
+    
     // Setup the window and game engine.
     JEngine game;
     game.setFps(20);
-    game.init("Warmonger", 1024, 768, 32, 0);
+    game.setBasePath(basePath);
+    game.init(appName.c_str(), 1024, 768, 32, 0);
 
     try {
         game.changeState(WMMainState::instance());

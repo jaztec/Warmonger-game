@@ -106,6 +106,9 @@ void TileManager::init(SDL_Surface* itsgraphs, Uint32 xTiles, Uint32 yTiles, Uin
     this->mapWidth = xTiles * TILE_WIDTH;
     this->mapHeight = yTiles * TILE_HEIGHT;
 
+    // Setup the camera.
+    this->camera.setMapWidth(this->getMapWidth());
+    this->camera.setMapHeight(this->getMapHeight());
     this->camera.setDimensions(screenWidth, screenHeigth);
 
     this->initGraphics();
