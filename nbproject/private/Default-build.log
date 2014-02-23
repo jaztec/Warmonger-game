@@ -1,7 +1,0 @@
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/main.o main.cpp
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/TileManager.o src/jaztec/TileManager.cpp
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/JEngine.o src/jaztec/JEngine.cpp
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/JRoute.o src/jaztec/JRoute.cpp
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/JlibSDL.o src/jaztec/JlibSDL.cpp
-g++ -g -fpermissive   -c  -Isrc/ -o build/obj/WMMainState.o src/warmonger/WMMainState.cpp
-g++ -g -fpermissive     -Isrc/ -o build/bin/Warmonger ./build/obj/main.o ./build/obj/TileManager.o ./build/obj/JEngine.o ./build/obj/JRoute.o ./build/obj/JlibSDL.o ./build/obj/WMMainState.o ./build/obj/WMPlayState.o -Bstatic -lSDL_mixer -lSDL_ttf -lSDL_image -lSDL `sdl-config --libs` -ldl  
